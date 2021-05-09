@@ -1,0 +1,9 @@
+{
+  "name": "calypso-elm",
+  "version": "1.0.0",
+  "description": "Calypso app written with Elm.",
+  "main": "index.js",
+  "repository": "git@github.com:murpjack/calypso-elm.git",
+  "author": "Jack <jackmurphy756@gmail.com>",
+  "license": "MIT"
+}
