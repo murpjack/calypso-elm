@@ -23,7 +23,7 @@ type alias Model =
 
 init : Model
 init =
-    1234
+    12345
 
 
 
@@ -52,15 +52,15 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ div
+        [ button [ onClick Decrement ] [ text "-" ]
+        , div [] [ text (String.fromInt model) ]
+        , button [ onClick Increment ] [ text "+" ]
+        , div
             []
             [ div [] [ h2 [] [ text "Watchlist" ] ]
             , div [] [ h2 [] [ text "Portfolio" ] ]
             , div [] [ text ("$" ++ String.fromInt model) ]
             ]
-        , button [ onClick Decrement ] [ text "-" ]
-        , div [] [ text (String.fromInt model) ]
-        , button [ onClick Increment ] [ text "+" ]
         , div
             []
             [ div [] [ span [] [ text "B" ], span [] [ text "Title" ] ]
