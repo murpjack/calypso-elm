@@ -5,5 +5,8 @@
   "main": "index.js",
   "repository": "git@github.com:murpjack/calypso-elm.git",
   "author": "Jack <jackmurphy756@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "start": "elm reactor & ./bin/watch.sh"
+  }
 }
