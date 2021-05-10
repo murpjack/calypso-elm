@@ -2,4 +2,4 @@
 
 # Recompile Elm
 echo "Watching for Elm file changes..." 
-elm make src/Main.elm
+elm make src/Main.elm --output dist/elm.js

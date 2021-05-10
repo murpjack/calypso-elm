@@ -23,7 +23,7 @@ type alias Model =
 
 init : Model
 init =
-    12346
+    12345
 
 
 
