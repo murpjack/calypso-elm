@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import Browser
-import Html exposing (Html, button, div, h2, span, text)
+import Html exposing (Html, button, div, h1, text)
 import Html.Events exposing (onClick)
 
 
@@ -9,8 +9,13 @@ import Html.Events exposing (onClick)
 -- MAIN
 
 
+main : Program () Model Msg
 main =
-    Browser.sandbox { init = init, update = update, view = view }
+    Browser.sandbox
+        { init = initialModel
+        , view = view
+        , update = update
+        }
 
 
 
@@ -18,12 +23,16 @@ main =
 
 
 type alias Model =
-    Int
+    { counter : Int
+    , title : String
+    }
 
 
-init : Model
-init =
-    12345
+initialModel : Model
+initialModel =
+    { counter = 0
+    , title = "Title"
+    }
 
 
 
@@ -39,10 +48,14 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Increment ->
-            model + 1
+            { counter = model.counter + 1
+            , title = model.title
+            }
 
         Decrement ->
-            model - 1
+            { counter = model.counter - 1
+            , title = model.title
+            }
 
 
 
@@ -52,19 +65,8 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ button [ onClick Decrement ] [ text "-" ]
-        , div [] [ text (String.fromInt model) ]
+        [ h1 [] [ text model.title ]
+        , button [ onClick Decrement ] [ text "-" ]
+        , div [] [ text (String.fromInt model.counter) ]
         , button [ onClick Increment ] [ text "+" ]
-        , div
-            []
-            [ div [] [ h2 [] [ text "Watchlist" ] ]
-            , div [] [ h2 [] [ text "Portfolio" ] ]
-            , div [] [ text ("$" ++ String.fromInt model) ]
-            ]
-        , div
-            []
-            [ div [] [ span [] [ text "B" ], span [] [ text "Title" ] ]
-            , div [] [ span [] [ text "B" ], span [] [ text "Title" ] ]
-            , div [] [ span [] [ text "B" ], span [] [ text "Title" ] ]
-            ]
         ]
