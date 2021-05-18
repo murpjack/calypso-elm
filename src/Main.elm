@@ -1,9 +1,11 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import Browser
-import Html exposing (Html, button, div, h1, p, text)
-import Html.Events exposing (onClick)
+import Html exposing (Html, button, div, h1, input, p, text)
+import Html.Attributes exposing (..)
+import Html.Events exposing (..)
 import Http
+import Json.Decode as D
 
 
 
@@ -21,11 +23,22 @@ main =
 
 
 
+-- PORTS
+
+
+port sendCounter : String -> Cmd msg
+
+
+port receiveCounter : (String -> msg) -> Sub msg
+
+
+
 -- MODEL
 
 
 type alias Model =
     { counter : Int
+    , counting : String
     , title : String
     , textData : Data
     , coinData : CoinData
@@ -35,6 +48,7 @@ type alias Model =
 initialModel : () -> ( Model, Cmd Msg )
 initialModel _ =
     ( { counter = 0
+      , counting = "0"
       , title = "Title"
       , textData = Loading
       , coinData = CoinLoading
@@ -73,25 +87,24 @@ type Msg
     | Decrement
     | GotTextData (Result Http.Error String)
     | GotCoinData (Result Http.Error String)
+    | InputChanged String
+    | Sent
+    | Received String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Increment ->
-            ( { counter = model.counter + 1
-              , title = model.title
-              , textData = model.textData
-              , coinData = model.coinData
+            ( { model
+                | counter = model.counter + 1
               }
             , Cmd.none
             )
 
         Decrement ->
-            ( { counter = model.counter - 1
-              , title = model.title
-              , textData = model.textData
-              , coinData = model.coinData
+            ( { model
+                | counter = model.counter - 1
               }
             , Cmd.none
             )
@@ -99,19 +112,15 @@ update msg model =
         GotTextData result ->
             case result of
                 Ok fullText ->
-                    ( { counter = model.counter
-                      , title = model.title
-                      , textData = Success fullText
-                      , coinData = model.coinData
+                    ( { model
+                        | textData = Success fullText
                       }
                     , Cmd.none
                     )
 
                 Err _ ->
-                    ( { counter = model.counter
-                      , title = model.title
-                      , textData = Failure
-                      , coinData = model.coinData
+                    ( { model
+                        | textData = Failure
                       }
                     , Cmd.none
                     )
@@ -119,22 +128,33 @@ update msg model =
         GotCoinData response ->
             case response of
                 Ok fullText ->
-                    ( { counter = model.counter
-                      , title = model.title
-                      , textData = model.textData
-                      , coinData = CoinSuccess fullText
+                    ( { model
+                        | coinData = CoinSuccess fullText
                       }
                     , Cmd.none
                     )
 
                 Err _ ->
-                    ( { counter = model.counter
-                      , title = model.title
-                      , textData = model.textData
-                      , coinData = CoinFailure
+                    ( { model
+                        | coinData = CoinFailure
                       }
                     , Cmd.none
                     )
+
+        InputChanged counting ->
+            ( { model | counting = counting }
+            , sendCounter counting
+            )
+
+        Sent ->
+            ( { model | counting = "" }
+            , sendCounter model.counting
+            )
+
+        Received counting ->
+            ( { model | counting = counting }
+            , Cmd.none
+            )
 
 
 
@@ -143,7 +163,7 @@ update msg model =
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    Sub.none
+    receiveCounter Received
 
 
 
@@ -156,7 +176,16 @@ view model =
         [ h1 [] [ text model.title ]
         , button [ onClick Decrement ] [ text "-" ]
         , div [] [ text (String.fromInt model.counter) ]
+        , div [] [ text ("Yay " ++ model.counting) ]
         , button [ onClick Increment ] [ text "+" ]
+        , input
+            [ type_ "number"
+            , onInput InputChanged
+            , placeholder model.counting
+            , on "keydown" (ifIsEnter Sent)
+            , value model.counting
+            ]
+            []
         , p [] [ text (showCBData model.coinData) ]
         , p [] [ text (showData model.textData) ]
         ]
@@ -186,3 +215,16 @@ showCBData status =
 
         CoinSuccess fullText ->
             fullText
+
+
+ifIsEnter : Msg -> D.Decoder Msg
+ifIsEnter msg =
+    D.field "key" D.string
+        |> D.andThen
+            (\key ->
+                if key == "Enter" then
+                    D.succeed msg
+
+                else
+                    D.fail "some other key"
+            )

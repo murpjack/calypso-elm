@@ -6109,7 +6109,7 @@ var $elm$http$Http$get = function (r) {
 };
 var $author$project$Main$initialModel = function (_v0) {
 	return _Utils_Tuple2(
-		{coinData: $author$project$Main$CoinLoading, counter: 0, textData: $author$project$Main$Loading, title: 'Title'},
+		{coinData: $author$project$Main$CoinLoading, counter: 0, counting: '0', textData: $author$project$Main$Loading, title: 'Title'},
 		$elm$core$Platform$Cmd$batch(
 			_List_fromArray(
 				[
@@ -6125,10 +6125,13 @@ var $author$project$Main$initialModel = function (_v0) {
 					})
 				])));
 };
-var $elm$core$Platform$Sub$batch = _Platform_batch;
-var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
+var $author$project$Main$Received = function (a) {
+	return {$: 'Received', a: a};
+};
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $author$project$Main$receiveCounter = _Platform_incomingPort('receiveCounter', $elm$json$Json$Decode$string);
 var $author$project$Main$subscriptions = function (_v0) {
-	return $elm$core$Platform$Sub$none;
+	return $author$project$Main$receiveCounter($author$project$Main$Received);
 };
 var $author$project$Main$CoinFailure = {$: 'CoinFailure'};
 var $author$project$Main$CoinSuccess = function (a) {
@@ -6139,58 +6142,102 @@ var $author$project$Main$Success = function (a) {
 	return {$: 'Success', a: a};
 };
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $author$project$Main$sendCounter = _Platform_outgoingPort('sendCounter', $elm$json$Json$Encode$string);
 var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
 			case 'Increment':
 				return _Utils_Tuple2(
-					{coinData: model.coinData, counter: model.counter + 1, textData: model.textData, title: model.title},
+					_Utils_update(
+						model,
+						{counter: model.counter + 1}),
 					$elm$core$Platform$Cmd$none);
 			case 'Decrement':
 				return _Utils_Tuple2(
-					{coinData: model.coinData, counter: model.counter - 1, textData: model.textData, title: model.title},
+					_Utils_update(
+						model,
+						{counter: model.counter - 1}),
 					$elm$core$Platform$Cmd$none);
 			case 'GotTextData':
 				var result = msg.a;
 				if (result.$ === 'Ok') {
 					var fullText = result.a;
 					return _Utils_Tuple2(
-						{
-							coinData: model.coinData,
-							counter: model.counter,
-							textData: $author$project$Main$Success(fullText),
-							title: model.title
-						},
+						_Utils_update(
+							model,
+							{
+								textData: $author$project$Main$Success(fullText)
+							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(
-						{coinData: model.coinData, counter: model.counter, textData: $author$project$Main$Failure, title: model.title},
+						_Utils_update(
+							model,
+							{textData: $author$project$Main$Failure}),
 						$elm$core$Platform$Cmd$none);
 				}
-			default:
+			case 'GotCoinData':
 				var response = msg.a;
 				if (response.$ === 'Ok') {
 					var fullText = response.a;
 					return _Utils_Tuple2(
-						{
-							coinData: $author$project$Main$CoinSuccess(fullText),
-							counter: model.counter,
-							textData: model.textData,
-							title: model.title
-						},
+						_Utils_update(
+							model,
+							{
+								coinData: $author$project$Main$CoinSuccess(fullText)
+							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(
-						{coinData: $author$project$Main$CoinFailure, counter: model.counter, textData: model.textData, title: model.title},
+						_Utils_update(
+							model,
+							{coinData: $author$project$Main$CoinFailure}),
 						$elm$core$Platform$Cmd$none);
 				}
+			case 'InputChanged':
+				var counting = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{counting: counting}),
+					$author$project$Main$sendCounter(counting));
+			case 'Sent':
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{counting: ''}),
+					$author$project$Main$sendCounter(model.counting));
+			default:
+				var counting = msg.a;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{counting: counting}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
 var $author$project$Main$Decrement = {$: 'Decrement'};
 var $author$project$Main$Increment = {$: 'Increment'};
+var $author$project$Main$InputChanged = function (a) {
+	return {$: 'InputChanged', a: a};
+};
+var $author$project$Main$Sent = {$: 'Sent'};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$json$Json$Decode$andThen = _Json_andThen;
+var $elm$json$Json$Decode$fail = _Json_fail;
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $author$project$Main$ifIsEnter = function (msg) {
+	return A2(
+		$elm$json$Json$Decode$andThen,
+		function (key) {
+			return (key === 'Enter') ? $elm$json$Json$Decode$succeed(msg) : $elm$json$Json$Decode$fail('some other key');
+		},
+		A2($elm$json$Json$Decode$field, 'key', $elm$json$Json$Decode$string));
+};
+var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
 };
@@ -6208,7 +6255,46 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
+var $elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 'MayStopPropagation', a: a};
+};
+var $elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$html$Html$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		$elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			$elm$json$Json$Decode$map,
+			$elm$html$Html$Events$alwaysStop,
+			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
+};
 var $elm$html$Html$p = _VirtualDom_node('p');
+var $elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$string(string));
+	});
+var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
 var $author$project$Main$showCBData = function (status) {
 	switch (status.$) {
 		case 'CoinLoading':
@@ -6233,6 +6319,8 @@ var $author$project$Main$showData = function (status) {
 };
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
+var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -6265,6 +6353,13 @@ var $author$project$Main$view = function (model) {
 						$elm$core$String$fromInt(model.counter))
 					])),
 				A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Yay ' + model.counting)
+					])),
+				A2(
 				$elm$html$Html$button,
 				_List_fromArray(
 					[
@@ -6274,6 +6369,20 @@ var $author$project$Main$view = function (model) {
 					[
 						$elm$html$Html$text('+')
 					])),
+				A2(
+				$elm$html$Html$input,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$type_('number'),
+						$elm$html$Html$Events$onInput($author$project$Main$InputChanged),
+						$elm$html$Html$Attributes$placeholder(model.counting),
+						A2(
+						$elm$html$Html$Events$on,
+						'keydown',
+						$author$project$Main$ifIsEnter($author$project$Main$Sent)),
+						$elm$html$Html$Attributes$value(model.counting)
+					]),
+				_List_Nil),
 				A2(
 				$elm$html$Html$p,
 				_List_Nil,
