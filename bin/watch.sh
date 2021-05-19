@@ -3,8 +3,9 @@
 echo "Watching for changes..." 
 inotifywait --monitor --recursive \
   --event modify --format "%w %f" \
-  ./src/ ./dist/index.html |
+  ./src/ ./src/index.html |
 while read filename; do
   ./bin/elmy.sh
   ./bin/sassy.sh
+  ./bin/getAppFromDist.sh
 done
