@@ -1,0 +1,1 @@
+cp ./src/pages/index.html ./dist/
