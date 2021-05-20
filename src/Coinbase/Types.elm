@@ -1,0 +1,33 @@
+-- module Coinbase.Types exposing (..)
+-- import Crypto.HMAC exposing (Hash, Key)
+-- import Time exposing (Posix)
+-- CB-ACCESS-KEY API key as a string
+-- CB-ACCESS-SIGN Message signature (see below)
+-- CB-ACCESS-TIMESTAMP Timestamp for your request
+-- type alias Accesskey =
+--     Key
+-- type alias Timestamp =
+--     Posix
+-- -- digest sha256 Key timestamp ++ method ++ endpoint ++ body
+-- type alias CallSignature =
+--     Hash
+-- type alias ExchangeRatesRecord =
+--   { currency: String
+--   , rates: Rates
+-- }
+-- type alias Rate = {
+--   AED: String
+--   ,AFN: String
+--   ,ALL: String
+--   ,AMD: String
+--   ,ANG: String
+--   ,AOA: String
+--   ,ARS: String
+--   ,AUD: String
+--   ,AWG: String
+--   ,AZN: String
+--   ,BAM: String
+-- }
+
+
+module Main exposing (..)
