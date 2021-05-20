@@ -1,7 +1,7 @@
 port module Main exposing (main)
 
 import Browser
-import Coinbase.Endpoints exposing (..)
+import Endpoints exposing (..)
 import Html exposing (Html, button, div, h1, input, p, text)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)

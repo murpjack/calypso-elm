@@ -30,4 +30,4 @@
 -- }
 
 
-module Main exposing (..)
+module Types exposing (..)

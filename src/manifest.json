@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Calypso",
+  "version": "2.1.4",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "browser_action": {
+    "default_popup": "extension.html",
+    "default_icon": {
+      "16": "images/chrome-extension-icons/icon-16.png",
+      "32": "images/chrome-extension-icons/icon-32.png",
+      "48": "images/chrome-extension-icons/icon-48.png",
+      "128": "images/chrome-extension-icons/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "images/chrome-extension-icons/icon-16.png",
+    "32": "images/chrome-extension-icons/icon-32.png",
+    "48": "images/chrome-extension-icons/icon-48.png",
+    "128": "images/chrome-extension-icons/icon-128.png"
+  },
+  "permissions": [
+    "storage",
+    "identity",
+    "tabs",
+    "http://murphyme.co.uk/success.html/*"
+  ]
+}
