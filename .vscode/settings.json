@@ -3,5 +3,12 @@
         "editor.formatOnSave": true
     },
     "elm.compiler": "./node_modules/.bin/elm",
-    "elm.makeCommand": "./node_modules/.bin/elm-make"
+    "elm.makeCommand": "./node_modules/.bin/elm-make",
+    "kanban.autosave": true,
+    "kanban.check.checkWhenMoveToDone": true,
+    "kanban.check.uncheckWhenMoveFromDone": true,
+    "kanban.endtag.setEndWhenMoveToDone": true,
+    "kanban.endtag.unsetEndWhenMoveFromDone": true,
+    "kanban.starttag.setStartWhenMoveFromTodo": true,
+    "kanban.starttag.unsetStartWhenMoveToTodo": true
 }
