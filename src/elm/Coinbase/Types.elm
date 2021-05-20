@@ -30,4 +30,4 @@
 -- }
 
 
-module Types exposing (..)
+module Coinbase.Types exposing (..)

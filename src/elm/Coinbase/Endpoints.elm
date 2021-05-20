@@ -1,4 +1,4 @@
-module Endpoints exposing (..)
+module Coinbase.Endpoints exposing (..)
 
 
 connect : String
