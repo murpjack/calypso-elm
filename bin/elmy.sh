@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 # Recompile Elm
-echo "Watching for Elm file changes..." 
+echo "Compiling Elm changes now." 
 elm make src/Main.elm --output dist/elm.js

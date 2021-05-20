@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Recompile styles
-echo "Sass file(s) modified"
 echo "Compiling css now."  
-sass --sourcemap=none ./src/Styles/index.scss ./dist/style.css |
+sass --no-source-map ./src/Styles/index.scss ./dist/style.css |
+# TODO: Add an error check before echo says "success"
 echo "CSS compiled successfully."

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-echo "Watching for changes..." 
+echo "Watching files..." 
 inotifywait --monitor --recursive \
   --event modify --format "%w %f" \
-  ./src/ ./src/pages/index.html |
+  ./src/ |
 while read filename; do
   ./bin/elmy.sh
   ./bin/sassy.sh
