@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-cp ./src/Pages/index.html ./dist
+# Copy Root html
+cp ./src/pages/index.html ./dist
