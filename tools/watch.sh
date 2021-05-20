@@ -5,7 +5,7 @@ inotifywait --monitor --recursive \
   --event modify --format "%w %f" \
   ./src/ |
 while read filename; do
-  ./bin/elmy.sh
-  ./bin/sassy.sh
-  ./bin/copyAppToDist.sh
+  ./tools/make.sh
+  ./tools/sass.sh
+  ./tools/pages.sh
 done

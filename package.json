@@ -7,6 +7,6 @@
   "author": "Jack <jackmurphy756@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "elm reactor & ./bin/watch.sh"
+    "start": "elm reactor & ./tools/watch.sh"
   }
 }
