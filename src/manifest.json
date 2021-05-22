@@ -1,10 +1,10 @@
 {
   "manifest_version": 2,
   "name": "Calypso",
-  "version": "2.1.4",
+  "version": "0.0.1",
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "browser_action": {
-    "default_popup": "extension.html",
+    "default_popup": "index.html",
     "default_icon": {
       "16": "images/chrome-extension-icons/icon-16.png",
       "32": "images/chrome-extension-icons/icon-32.png",

@@ -1,8 +1,6 @@
 # kanban
 
 ## Not Started
-- [ ] Make auth call to CB and get back tokens
-
 - [ ] Make call for token and get back tokens
 
 - [ ] Implement localStore with refreshToken
@@ -11,6 +9,7 @@
 
 - [ ] wireframes
 
+- [ ] Style Login per wireframe
 - [ ] Style app per wireframe
 
 - [ ] Optimise/Minify css
@@ -25,6 +24,7 @@
 
 
 ## In Progress
+- [ ] Make auth call to CB and get back tokens
 
 
 ## Done

@@ -8,6 +8,6 @@
   "license": "MIT",
   "scripts": {
     "start": "elm reactor & ./tools/watch.sh",
-    "build": "./tools/assets.sh & ./tools/make.sh & ./tools/sass.sh & ./tools/pages.sh"
+    "build": "./tools/build.sh"
   }
 }
