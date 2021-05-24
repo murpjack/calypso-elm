@@ -2,11 +2,12 @@ port module Main exposing (main)
 
 import Browser
 import Coinbase.Endpoints exposing (..)
-import Html exposing (Html, button, div, h1, input, p, text)
+import Html exposing (Html, a, button, div, h1, input, p, text)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http
 import Json.Decode as D
+import Url.Builder exposing (crossOrigin, string)
 
 
 
@@ -46,11 +47,6 @@ type alias Model =
     }
 
 
-clientUri : String
-clientUri =
-    "https://www.coinbase.com/oauth/authorize?client_id=ee13f194f5631432e54213d20da4d929ebc7dc8a2b0d644af69a1eb08081a0f0&redirect_uri=https%3A%2F%2Fmurphyme.co.uk%2Fcalypso%2Fsuccess&response_type=code&scope=wallet%3Auser%3Aread"
-
-
 initialModel : () -> ( Model, Cmd Msg )
 initialModel _ =
     ( { counter = 0
@@ -65,7 +61,7 @@ initialModel _ =
             , expect = Http.expectString GotTextData
             }
         , Http.get
-            { url = clientUri
+            { url = "https://elm-lang.org/assets/public-opinion.txt"
             , expect = Http.expectString GotCoinData
             }
         ]
@@ -172,6 +168,19 @@ subscriptions _ =
     receiveCounter Received
 
 
+clientUri : String
+clientUri =
+    crossOrigin "https://www.coinbase.com"
+        [ "oauth", "authorize" ]
+        [ string "client_id"
+            "ClientIDyoureceivedafterregisteringyourapplication"
+        , string "response_type"
+            "code"
+        , string "redirect_uri"
+            "https://murphyme.co.uk/calypso/success"
+        ]
+
+
 
 -- VIEW
 
@@ -184,6 +193,7 @@ view model =
         , div [] [ text (String.fromInt model.counter) ]
         , div [] [ text ("Yay " ++ model.counting) ]
         , button [ onClick Increment ] [ text "+" ]
+        , a [ href clientUri, target "_blank" ] [ text "Sign in" ]
         , input
             [ type_ "number"
             , onInput InputChanged
