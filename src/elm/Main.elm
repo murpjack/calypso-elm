@@ -8,12 +8,8 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http
 import Json.Decode as D
-import Url.Builder exposing (crossOrigin, string)
-
-
-type alias Flags =
-    { clientId1 : String
-    }
+import Main.LoginView exposing (clientUri)
+import Main.Types exposing (..)
 
 
 
@@ -44,25 +40,11 @@ port receiveCounter : (String -> msg) -> Sub msg
 -- MODEL
 
 
-type alias Model =
-    { flags : Flags
-    , counter : Int
-    , counting : String
-    , title : String
-    , textData : Data
-    , coinData : CoinData
-    }
-
-
 init : Flags -> ( Model, Cmd Msg )
 init flags =
     ( initialModel flags
     , Cmd.batch
         [ Http.get
-            { url = "https://elm-lang.org/assets/public-opinion.txt"
-            , expect = Http.expectString GotTextData
-            }
-        , Http.get
             { url = "https://elm-lang.org/assets/public-opinion.txt"
             , expect = Http.expectString GotCoinData
             }
@@ -76,35 +58,12 @@ initialModel flags =
     , counter = 0
     , counting = "0"
     , title = "Title"
-    , textData = Loading
     , coinData = CoinLoading
     }
 
 
-type Data
-    = Failure
-    | Loading
-    | Success String
-
-
-type CoinData
-    = CoinFailure
-    | CoinLoading
-    | CoinSuccess String
-
-
 
 -- UPDATE
-
-
-type Msg
-    = Increment
-    | Decrement
-    | GotTextData (Result Http.Error String)
-    | GotCoinData (Result Http.Error String)
-    | InputChanged String
-    | Sent
-    | Received String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -123,22 +82,6 @@ update msg model =
               }
             , Cmd.none
             )
-
-        GotTextData result ->
-            case result of
-                Ok fullText ->
-                    ( { model
-                        | textData = Success fullText
-                      }
-                    , Cmd.none
-                    )
-
-                Err _ ->
-                    ( { model
-                        | textData = Failure
-                      }
-                    , Cmd.none
-                    )
 
         GotCoinData response ->
             case response of
@@ -181,19 +124,6 @@ subscriptions _ =
     receiveCounter Received
 
 
-clientUri : String -> String
-clientUri clientId =
-    crossOrigin "https://www.coinbase.com"
-        [ "oauth", "authorize" ]
-        [ string "client_id"
-            clientId
-        , string "response_type"
-            "code"
-        , string "redirect_uri"
-            "https://murphyme.co.uk/calypso/success"
-        ]
-
-
 
 -- VIEW
 
@@ -216,21 +146,7 @@ view model =
             ]
             []
         , p [] [ text (showCBData model.coinData) ]
-        , p [] [ text (showData model.textData) ]
         ]
-
-
-showData : Data -> String
-showData status =
-    case status of
-        Loading ->
-            "Loading..."
-
-        Failure ->
-            "Failure."
-
-        Success fullText ->
-            fullText
 
 
 showCBData : CoinData -> String
