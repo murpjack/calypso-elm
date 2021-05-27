@@ -2,6 +2,7 @@ port module Main exposing (main)
 
 import Browser
 import Coinbase.Endpoints exposing (..)
+import Env exposing (clientId)
 import Html exposing (Html, a, button, div, h1, input, p, text)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -10,14 +11,19 @@ import Json.Decode as D
 import Url.Builder exposing (crossOrigin, string)
 
 
+type alias Flags =
+    { clientId1 : String
+    }
+
+
 
 -- MAIN
 
 
-main : Program () Model Msg
+main : Program Flags Model Msg
 main =
     Browser.element
-        { init = initialModel
+        { init = init
         , update = update
         , subscriptions = subscriptions
         , view = view
@@ -39,7 +45,8 @@ port receiveCounter : (String -> msg) -> Sub msg
 
 
 type alias Model =
-    { counter : Int
+    { flags : Flags
+    , counter : Int
     , counting : String
     , title : String
     , textData : Data
@@ -47,14 +54,9 @@ type alias Model =
     }
 
 
-initialModel : () -> ( Model, Cmd Msg )
-initialModel _ =
-    ( { counter = 0
-      , counting = "0"
-      , title = "Title"
-      , textData = Loading
-      , coinData = CoinLoading
-      }
+init : Flags -> ( Model, Cmd Msg )
+init flags =
+    ( initialModel flags
     , Cmd.batch
         [ Http.get
             { url = "https://elm-lang.org/assets/public-opinion.txt"
@@ -66,6 +68,17 @@ initialModel _ =
             }
         ]
     )
+
+
+initialModel : Flags -> Model
+initialModel flags =
+    { flags = flags
+    , counter = 0
+    , counting = "0"
+    , title = "Title"
+    , textData = Loading
+    , coinData = CoinLoading
+    }
 
 
 type Data
@@ -168,12 +181,12 @@ subscriptions _ =
     receiveCounter Received
 
 
-clientUri : String
-clientUri =
+clientUri : String -> String
+clientUri clientId =
     crossOrigin "https://www.coinbase.com"
         [ "oauth", "authorize" ]
         [ string "client_id"
-            "ClientIDyoureceivedafterregisteringyourapplication"
+            clientId
         , string "response_type"
             "code"
         , string "redirect_uri"
@@ -193,7 +206,7 @@ view model =
         , div [] [ text (String.fromInt model.counter) ]
         , div [] [ text ("Yay " ++ model.counting) ]
         , button [ onClick Increment ] [ text "+" ]
-        , a [ href clientUri, target "_blank" ] [ text "Sign in" ]
+        , a [ href (clientUri clientId), target "_blank" ] [ text ("Sign in " ++ clientId) ]
         , input
             [ type_ "number"
             , onInput InputChanged

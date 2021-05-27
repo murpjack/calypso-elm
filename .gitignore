@@ -1,6 +1,8 @@
 node_modules/
 
-.env
+env/
+# Just a temporary step necessary for local work
+src/elm/Env.elm
 
 .vscode/settings.json
 
