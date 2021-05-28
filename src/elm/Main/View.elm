@@ -1,33 +1,20 @@
 module Main.View exposing (..)
 
 import Env exposing (clientId)
-import Html exposing (Html, a, button, div, h1, input, p, text)
+import Html exposing (Html, a, div, h1, p, text)
 import Html.Attributes exposing (..)
-import Html.Events exposing (on, onClick, onInput)
 import Json.Decode as D
-import Main.LoginView exposing (clientUri)
 import Main.Types exposing (..)
+import Url.Builder exposing (crossOrigin, string)
 
 
-view : Model -> Html Msg
-view model =
+loginView : Model -> Html Msg
+loginView model =
     div []
-        [ h1 [] [ text model.title ]
-        , button [ onClick Decrement ] [ text "-" ]
-        , div [] [ text (String.fromInt model.counter) ]
-        , div [] [ text ("Yay " ++ model.counting) ]
-        , button [ onClick Increment ] [ text "+" ]
-        , a [ href (clientUri clientId), target "_blank" ] [ text ("Sign in " ++ clientId) ]
-        , input
-            [ type_ "number"
-            , onInput InputChanged
-            , placeholder model.counting
-            , on "keydown" (ifIsEnter Sent)
-            , value model.counting
+        [ h1 [] [ text "Calypso" ]
+        , div []
+            [ a [ href (clientUri clientId), target "_blank" ] [ text "Sign in with Coinbase" ]
             ]
-            []
-        , p [] [ text (showCBData model.coinData) ]
-        , p [] [ text (showData model.textData) ]
         , div []
             [ p [] [ text "Calypso" ]
             , p []
@@ -41,17 +28,39 @@ view model =
         ]
 
 
-showData : Data -> String
-showData status =
-    case status of
-        Loading ->
-            "Loading..."
+clientUri : String -> String
+clientUri clientId =
+    crossOrigin "https://www.coinbase.com"
+        [ "oauth", "authorize" ]
+        [ string "client_id"
+            clientId
+        , string "response_type"
+            "code"
+        , string "redirect_uri"
+            "https://murphyme.co.uk/calypso/success"
+        ]
 
-        Failure ->
-            "Failure."
 
-        Success fullText ->
-            fullText
+cryptoView : Model -> Html Msg
+cryptoView model =
+    div []
+        [ h1 [] [ text "Calypso" ]
+        , div []
+            [ div [] []
+            , div [] []
+            , div [] []
+            ]
+        , div []
+            [ p [] [ text "Calypso" ]
+            , p []
+                [ text "</> by Jack Murphy in "
+                , a [ href "https://elm-lang.org/", target "_blank" ]
+                    [ text "Elm"
+                    ]
+                , text "."
+                ]
+            ]
+        ]
 
 
 showCBData : CoinData -> String

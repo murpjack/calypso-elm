@@ -16,7 +16,6 @@ type alias Model =
     { flags : Flags
     , counter : Int
     , counting : String
-    , title : String
     , coinData : CoinData
     }
 

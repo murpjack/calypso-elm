@@ -2,14 +2,13 @@ port module Main exposing (main)
 
 import Browser
 import Coinbase.Endpoints exposing (..)
-import Env exposing (clientId)
-import Html exposing (Html, a, button, div, h1, input, p, text)
+import Html exposing (Html, button, div, input, p, text)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http
 import Json.Decode as D
-import Main.LoginView exposing (clientUri)
 import Main.Types exposing (..)
+import Main.View exposing (cryptoView, loginView)
 
 
 
@@ -57,7 +56,6 @@ initialModel flags =
     { flags = flags
     , counter = 0
     , counting = "0"
-    , title = "Title"
     , coinData = CoinLoading
     }
 
@@ -131,12 +129,12 @@ subscriptions _ =
 view : Model -> Html Msg
 view model =
     div []
-        [ h1 [] [ text model.title ]
+        [ loginView model
+        , cryptoView model
         , button [ onClick Decrement ] [ text "-" ]
         , div [] [ text (String.fromInt model.counter) ]
         , div [] [ text ("Yay " ++ model.counting) ]
         , button [ onClick Increment ] [ text "+" ]
-        , a [ href (clientUri clientId), target "_blank" ] [ text ("Sign in " ++ clientId) ]
         , input
             [ type_ "number"
             , onInput InputChanged
