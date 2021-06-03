@@ -1,15 +1,10 @@
 # kanban
 
 ## Not Started
-- [ ] Make call for token and get back tokens
-
-- [ ] Implement localStore with refreshToken
-
 - [ ] Make call for crypto exchange rates
 
 - [ ] wireframes
 
-- [ ] Style Login per wireframe
 - [ ] Style app per wireframe
 
 - [ ] Optimise/Minify css
@@ -24,12 +19,15 @@
 
 
 ## In Progress
-- [ ] Make auth call to CB and get back tokens
+- [ ] Make call for token and get back tokens
+- [ ] Implement localStore with refreshToken
 
 
 ## Done
-- [x] Plan folder structure
 - [x] implement build tooling
+- [x] Plan folder structure
+- [x] Hook up 'authorise' sign in button to get back tokens
+- [x] Style Login per wireframe
 
 
 ## Future
