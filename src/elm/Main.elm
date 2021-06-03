@@ -1,12 +1,13 @@
 port module Main exposing (main)
 
+-- import Json.Decode as D
+
 import Browser
 import Coinbase.Endpoints exposing (..)
-import Html exposing (Html, button, div, input, p, text)
+import Html exposing (Html, div, p, text)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http
-import Json.Decode as D
 import Main.Types exposing (..)
 import Main.View exposing (cryptoView, loginView)
 
@@ -54,8 +55,6 @@ init flags =
 initialModel : Flags -> Model
 initialModel flags =
     { flags = flags
-    , counter = 0
-    , counting = "0"
     , coinData = CoinLoading
     }
 
@@ -67,20 +66,6 @@ initialModel flags =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Increment ->
-            ( { model
-                | counter = model.counter + 1
-              }
-            , Cmd.none
-            )
-
-        Decrement ->
-            ( { model
-                | counter = model.counter - 1
-              }
-            , Cmd.none
-            )
-
         GotCoinData response ->
             case response of
                 Ok fullText ->
@@ -97,18 +82,13 @@ update msg model =
                     , Cmd.none
                     )
 
-        InputChanged counting ->
-            ( { model | counting = counting }
-            , sendCounter counting
-            )
-
         Sent ->
-            ( { model | counting = "" }
-            , sendCounter model.counting
+            ( model
+            , sendCounter "1"
             )
 
         Received counting ->
-            ( { model | counting = counting }
+            ( model
             , Cmd.none
             )
 
@@ -131,18 +111,6 @@ view model =
     div []
         [ loginView model
         , cryptoView model
-        , button [ onClick Decrement ] [ text "-" ]
-        , div [] [ text (String.fromInt model.counter) ]
-        , div [] [ text ("Yay " ++ model.counting) ]
-        , button [ onClick Increment ] [ text "+" ]
-        , input
-            [ type_ "number"
-            , onInput InputChanged
-            , placeholder model.counting
-            , on "keydown" (ifIsEnter Sent)
-            , value model.counting
-            ]
-            []
         , p [] [ text (showCBData model.coinData) ]
         ]
 
@@ -160,14 +128,14 @@ showCBData status =
             fullText
 
 
-ifIsEnter : Msg -> D.Decoder Msg
-ifIsEnter msg =
-    D.field "key" D.string
-        |> D.andThen
-            (\key ->
-                if key == "Enter" then
-                    D.succeed msg
 
-                else
-                    D.fail "some other key"
-            )
+-- ifIsEnter : Msg -> D.Decoder Msg
+-- ifIsEnter msg =
+--     D.field "key" D.string
+--         |> D.andThen
+--             (\key ->
+--                 if key == "Enter" then
+--                     D.succeed msg
+--                 else
+--                     D.fail "some other key"
+--             )

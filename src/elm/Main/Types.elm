@@ -4,18 +4,13 @@ import Http
 
 
 type Msg
-    = Increment
-    | Decrement
-    | GotCoinData (Result Http.Error String)
-    | InputChanged String
+    = GotCoinData (Result Http.Error String)
     | Sent
     | Received String
 
 
 type alias Model =
     { flags : Flags
-    , counter : Int
-    , counting : String
     , coinData : CoinData
     }
 

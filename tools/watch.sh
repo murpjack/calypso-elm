@@ -9,9 +9,6 @@ while read filename; do
   rm -rf dist
   mkdir dist
 
-  ./tools/make.sh
-  
-  ./tools/sass.sh
-  
-  ./tools/pages.sh
+  ./tools/build.sh
+
 done

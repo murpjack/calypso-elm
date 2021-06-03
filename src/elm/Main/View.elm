@@ -1,7 +1,7 @@
 module Main.View exposing (..)
 
 import Env exposing (clientId)
-import Html exposing (Html, a, div, h1, p, text)
+import Html exposing (Html, a, div, h1, img, p, text)
 import Html.Attributes exposing (..)
 import Json.Decode as D
 import Main.Types exposing (..)
@@ -10,19 +10,30 @@ import Url.Builder exposing (crossOrigin, string)
 
 loginView : Model -> Html Msg
 loginView model =
-    div []
-        [ h1 [] [ text "Calypso" ]
-        , div []
-            [ a [ href (clientUri clientId), target "_blank" ] [ text "Sign in with Coinbase" ]
+    div [ class "login" ]
+        [ h1 [ class "title" ] [ text "Calypso" ]
+        , img
+            [ src "images/logo-chrome.png"
+            , alt "Calypso logo"
+            , class "logo"
             ]
-        , div []
-            [ p [] [ text "Calypso" ]
-            , p []
-                [ text "</> by Jack Murphy in "
+            []
+        , div [ class "content" ]
+            [ waveAnimation model
+            , a [ class "button button--pushable", href (clientUri clientId), target "_blank" ] [ text "Sign in with Coinbase" ]
+            ]
+        , div [ class "footer" ]
+            [ p []
+                [ text "Written in "
                 , a [ href "https://elm-lang.org/", target "_blank" ]
-                    [ text "Elm"
+                    [ img
+                        [ src "images/elm-icon-colour.png"
+                        , alt "Elm language"
+                        , class "elm-icon"
+                        ]
+                        []
                     ]
-                , text "."
+                , text " by Jack Murphy"
                 ]
             ]
         ]
@@ -43,7 +54,7 @@ clientUri clientId =
 
 cryptoView : Model -> Html Msg
 cryptoView model =
-    div []
+    div [ class "app" ]
         [ h1 [] [ text "Calypso" ]
         , div []
             [ div [] []
@@ -87,3 +98,19 @@ ifIsEnter msg =
                 else
                     D.fail "some other key"
             )
+
+
+waveAnimation : Model -> Html Msg
+waveAnimation model =
+    div [ class "waveWrapper waveAnimation" ]
+        [ div [ class "waveWrapperInner bgTop" ]
+            [ div [ class "wave waveTop" ] [] ]
+        , div [ class "waveWrapperInner bgMiddle" ]
+            [ div [ class "wave waveMiddle" ] []
+            ]
+        , div [ class "waveWrapperInner bgBottom" ]
+            [ div [ class "wave waveBottom" ] []
+            ]
+
+        -- , div [ class "waveWrapperInner fadeBottom" ] []
+        ]

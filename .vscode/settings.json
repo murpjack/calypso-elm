@@ -2,6 +2,12 @@
     "[elm]": {
         "editor.formatOnSave": true
     },
+    "[SCSS]": {
+        "editor.formatOnSave": true,
+    },
+    "[CSS]": {
+        "editor.formatOnSave": true,
+    },
     "elm.compiler": "./node_modules/.bin/elm",
     "elm.makeCommand": "./node_modules/.bin/elm-make",
     "kanban.autosave": true,

@@ -1,10 +1,192 @@
-// Hello friends
-// Line 1.6
+$bg-primary: #d7fff1;
+$bg-secondary: #9dd9d2;
+$coinbase-vivid: #1554f0;
+$off-white: #eee;
+$dark-blue: #05668d;
+
+// Shadows //
+@mixin box_shadow($level) {
+  @if $level == 0 {
+    box-shadow: none;
+  } @else if $level == 1 {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  } @else if $level == 2 {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  } @else if $level == 3 {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  } @else if $level == 4 {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  } @else if $level == 5 {
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  }
+}
 
 body {
-    background-color: papayawhip;
-    color: red;
-    font-size: small;
-    width: 400px;
-    height: 580px;
+  background-color: $bg-primary;
+  color: $dark-blue;
+  font-size: small;
+  height: 580px;
+  margin: 0;
+  padding: 0;
+  width: 400px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+  .elm-icon {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    position: relative;
+    top: 5px;
+    margin: 0px 4px;
+  }
+}
+
+.login {
+  height: 100vh;
+  background-color: $bg-primary;
+  text-align: center;
+
+  .title {
+    margin: 0;
+    padding: 0.5em 0;
+    letter-spacing: 3px;
+    font-size: 40px;
+  }
+
+  .logo {
+    position: relative;
+    top: 40px;
+    transform: rotate(-50deg);
+    z-index: 2;
+  }
+
+  .content {
+    background-color: $bg-secondary;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    top: calc(50% - 110px);
+  }
+
+  .button {
+    background-color: $coinbase-vivid;
+    border-radius: 5px;
+    color: $off-white;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 700;
+    letter-spacing: 0.05rem;
+    margin-top: 60px;
+    padding: 10px 15px;
+    text-decoration: none;
+  }
+
+  .button--pushable {
+    transition: 0.1s ease-in-out;
+    @include box_shadow(1);
+
+    &:hover {
+      @include box_shadow(0);
+      transform: scaleY(0.99);
+    }
+  }
+}
+
+.waveWrapper {
+  overflow: hidden;
+  position: relative;
+  margin: auto;
+  height: 200px;
+}
+.waveWrapperInner {
+  position: absolute;
+  width: 100%;
+  overflow: hidden;
+  height: 100%;
+  bottom: 0;
+  background-image: linear-gradient(
+    0deg,
+    $bg-secondary 15%,
+    $dark-blue 15%,
+    $bg-primary 85%
+  );
+
+  //   &.fadeBottom {
+  //     background-image: linear-gradient(
+  //       to top,
+  //       $bg-secondary 20%,
+  //       $dark-blue 80%
+  //     );
+  //     height: 30%;
+  //   }
+}
+.bgTop {
+  z-index: 1;
+  opacity: 0.5;
+}
+.bgMiddle {
+  z-index: 1;
+  opacity: 0.7;
+}
+.bgBottom {
+  z-index: 0;
+}
+
+.wave {
+  position: absolute;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background-repeat: repeat no-repeat;
+  background-position: 0 bottom;
+  transform-origin: center bottom;
+}
+
+.waveTop {
+  background-image: url("images/waves/wave1_9dd9d2.png");
+  background-size: 50% 100px;
+}
+.waveMiddle {
+  background-image: url("images/waves/wave2_9dd9d2.png");
+  background-size: 50% 120px;
+}
+.waveBottom {
+  background-image: url("images/waves/wave1_9dd9d2.png");
+  background-size: 50% 100px;
+}
+
+.waveAnimation {
+  .waveTop {
+    animation: move_wave 10s linear infinite;
+    animation-delay: 0.5s;
+  }
+  .waveMiddle {
+    animation: move_wave 6s linear infinite;
+  }
+  .waveBottom {
+    animation: move_wave 15s linear infinite;
+  }
+}
+
+@keyframes move_wave {
+  0% {
+    transform: translateX(0) translateZ(0) scaleY(1);
+  }
+  50% {
+    transform: translateX(-25%) translateZ(0) scaleY(0.55);
+  }
+  100% {
+    transform: translateX(-50%) translateZ(0) scaleY(1);
+  }
+}
+
+.crypto {
+  background-color: peru;
+  text-align: center;
 }
