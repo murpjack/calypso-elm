@@ -19,7 +19,12 @@
 
 
 ## In Progress
-- [ ] Make call for token and get back tokens
+- [ ] Post for token 
+- [ ] set refrsh token; get usr related rates data. 
+- [ ] get general data. 
+- [ ] get/set storage ports
+- [ ] tabs api port
+- [ ] find tab by url; rtn has tmp
 - [ ] Implement localStore with refreshToken
 
 
