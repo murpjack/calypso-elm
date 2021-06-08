@@ -16,7 +16,7 @@ import Main.View exposing (cryptoView, loginView)
 -- MAIN
 
 
-main : Program Flags Model Msg
+main : Program () Model Msg
 main =
     Browser.element
         { init = init
@@ -30,32 +30,36 @@ main =
 -- PORTS
 
 
-port sendCounter : String -> Cmd msg
+port clearCoinbaseRefreshToken : () -> Cmd msg
 
 
-port receiveCounter : (String -> msg) -> Sub msg
+port getCoinbaseRefreshToken : (String -> msg) -> Sub msg
+
+
+port getCoinbaseTemporaryToken : (String -> msg) -> Sub msg
 
 
 
 -- MODEL
 
 
-init : Flags -> ( Model, Cmd Msg )
-init flags =
-    ( initialModel flags
+init : () -> ( Model, Cmd Msg )
+init _ =
+    ( initialModel
     , Cmd.batch
         [ Http.get
-            { url = "https://elm-lang.org/assets/public-opinion.txt"
+            { url = "https://api.coinbase.com/v2/exchange-rates?currency=GBP"
             , expect = Http.expectString GotCoinData
             }
         ]
     )
 
 
-initialModel : Flags -> Model
-initialModel flags =
-    { flags = flags
-    , coinData = CoinLoading
+initialModel : Model
+initialModel =
+    { coinData = CoinLoading
+    , tempToken = "nothing"
+    , refreshToken = "nothing"
     }
 
 
@@ -82,24 +86,36 @@ update msg model =
                     , Cmd.none
                     )
 
-        Sent ->
+        ClearTempToken ->
             ( model
-            , sendCounter "1"
+            , clearCoinbaseRefreshToken ()
             )
 
-        Received counting ->
-            ( model
+        ReceiveTempToken code ->
+            ( { model | tempToken = code }
+            , Cmd.none
+            )
+
+        ReceiveRefreshToken code ->
+            ( { model | refreshToken = code }
             , Cmd.none
             )
 
 
 
+--         ReceiveRefreshToken code ->
+-- ( { model | tempToken = code }
+-- , Cmd.none
+-- )
 -- SUBSCRIPTIONS
 
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    receiveCounter Received
+    Sub.batch
+        [ getCoinbaseTemporaryToken ReceiveTempToken
+        , getCoinbaseRefreshToken ReceiveRefreshToken
+        ]
 
 
 
@@ -126,16 +142,3 @@ showCBData status =
 
         CoinSuccess fullText ->
             fullText
-
-
-
--- ifIsEnter : Msg -> D.Decoder Msg
--- ifIsEnter msg =
---     D.field "key" D.string
---         |> D.andThen
---             (\key ->
---                 if key == "Enter" then
---                     D.succeed msg
---                 else
---                     D.fail "some other key"
---             )

@@ -111,6 +111,4 @@ waveAnimation model =
         , div [ class "waveWrapperInner bgBottom" ]
             [ div [ class "wave waveBottom" ] []
             ]
-
-        -- , div [ class "waveWrapperInner fadeBottom" ] []
         ]

@@ -5,18 +5,15 @@ import Http
 
 type Msg
     = GotCoinData (Result Http.Error String)
-    | Sent
-    | Received String
+    | ClearTempToken
+    | ReceiveTempToken String
+    | ReceiveRefreshToken String
 
 
 type alias Model =
-    { flags : Flags
-    , coinData : CoinData
-    }
-
-
-type alias Flags =
-    { clientId1 : String
+    { coinData : CoinData
+    , tempToken : String
+    , refreshToken : String
     }
 
 

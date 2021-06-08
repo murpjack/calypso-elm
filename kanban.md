@@ -19,13 +19,17 @@
 
 
 ## In Progress
-- [ ] Post for token 
-- [ ] set refrsh token; get usr related rates data. 
+- [x] get/set storage ports
+
+- [ ] Add timestamp to successUri params
+- [x] Query tabs for most recent successUri
+- [x] Extract tempCode from tab
+
+- [ ] Use tempCode to Post for tokens 
+- [ ] Store refreshToken
+
+- [ ] Use AccessToken to Get user's rates. 
 - [ ] get general data. 
-- [ ] get/set storage ports
-- [ ] tabs api port
-- [ ] find tab by url; rtn has tmp
-- [ ] Implement localStore with refreshToken
 
 
 ## Done
